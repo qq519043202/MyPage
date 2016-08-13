@@ -1,5 +1,5 @@
 <?php
-
+isset($_SESSION) OR session_start();
 	/**
 	 * ×¢£º±¾ÓÊ¼þÀà¶¼ÊÇ¾­¹ýÎÒ²âÊÔ³É¹¦ÁËµÄ£¬Èç¹û´ó¼Ò·¢ËÍÓÊ¼þµÄÊ±ºòÓöµ½ÁËÊ§°ÜµÄÎÊÌâ£¬Çë´ÓÒÔÏÂ¼¸µãÅÅ²é£º
 	 * 1. ÓÃ»§ÃûºÍÃÜÂëÊÇ·ñÕýÈ·£»
@@ -19,17 +19,26 @@
 	$smtpuser = "qq519043202@sina.com";//SMTP邮箱
 	$smtppass = "qq963852741";//SMTP邮箱密码
 	$mailtitle = "来自tmn07.ren的消息";//标题
-	$mailcontent = "<h1>".$_POST['content']."</h1>";//内容
+
 	$mailtype = "HTML";//邮件格式
 	//************************ 配置信息 ****************************
 	$smtp = new smtp($smtpserver,$smtpserverport,true,$smtpuser,$smtppass);//这里面的一个true是表示使用身份验证,否则不使用身份验证.
 	$smtp->debug = false;//是否显示发送的调试信息
-	$state = $smtp->sendmail($smtpemailto, $smtpusermail, $mailtitle, $mailcontent, $mailtype);
 
-	if($state==""){
-		echo "error";
-		exit();
+	if ($_POST['content'] != '' && $_POST['tag'] == $_SESSION['tag']) {
+		$mailcontent = "<h1>".$_POST['content']."</h1>";//内容
+		$state = $smtp->sendmail($smtpemailto, $smtpusermail, $mailtitle, $mailcontent, $mailtype);
+		// $state = '1';
+		if($state==""){
+			echo "error";
+			exit();
+		}
+		echo "OK";
 	}
-	echo "OK";
+	else{
+		echo 'error';
+	}
+
+
 	
 ?>
